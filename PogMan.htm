@@ -106,31 +106,31 @@
 				var limitWidth = pogman.offsetWidth - pog.offsetWidth - qtde - 2;
 				//calc = stage - pog - imaginary_border - solid_border
 				
-				//posição X
+				//posiÃ§Ã£o X
 				if (keyCode == 37) //esquerda
 				{
 					pog.style.textAlign = "left";
-					pog.innerHTML = "º__º";
+					pog.innerHTML = "Âº__Âº";
 					left -= qtde;
 				}
 				if (keyCode == 39) //direita
 				{
 					pog.style.textAlign = "right";
-					pog.innerHTML = "º__º";
+					pog.innerHTML = "Âº__Âº";
 					left += qtde;
 				}
 				
-				//posição Y
+				//posiÃ§Ã£o Y
 				if (keyCode == 38) //cima
 				{
 					pog.style.textAlign = "center";
-					pog.innerHTML = "º__º";
+					pog.innerHTML = "Âº__Âº";
 					top -= qtde;
 				}
 				if (keyCode == 40) //baixo
 				{
 					pog.style.textAlign = "center";
-					pog.innerHTML = "<br/>º__º";
+					pog.innerHTML = "<br/>Âº__Âº";
 					top += qtde;
 				}
 				
@@ -308,9 +308,9 @@
 		</script>
 	</head>
 	
-	<body onload="start()" onkeydown="move(this, event)" onkeyup="pog.style.textAlign='center'; pog.innerHTML = 'º__º';">
+	<body onload="start()" onkeydown="move(this, event)" onkeyup="pog.style.textAlign='center'; pog.innerHTML = 'Âº__Âº';">
 		<div id="pogman">
-			<div id="pog">º__º</div>
+			<div id="pog">Âº__Âº</div>
 		</div>
 		<div id="debugman">
 			x: 0 y: 0 mais: 0 menos: 0
