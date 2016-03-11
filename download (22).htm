@@ -1,0 +1,319 @@
+<!--Escreva o HTML aqui-->
+<html>
+	<head>
+		<style type='text/css'>
+			*{
+				font-family: tahoma;
+			}
+			body,html{
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				height: 100%;
+				color: yellow;
+				font-weight: bold;
+				text-align: center;
+				font-size: 10px;
+			}
+			html{
+				background: linear-gradient(#004,#005,#004);
+			}
+			#pogman{
+				background: linear-gradient(#000,#111,#000,#111,#000,#111,#000);
+				width: 500px;
+				height: 500px;
+				margin: 0 auto;
+				position: relative;
+				border: 1px solid;
+				top: 50%;
+				margin-top: -250px;
+			}
+			#pog{
+				background: yellow;
+				background: linear-gradient(yellow, yellow, orange);
+				width: 25px;
+				height: 25px;
+				overflow: hidden;
+				transition: all 0s !important;
+				box-shadow:	 1px  1px  0px #FF0,
+							 1px -1px  0px #FF0,
+							-1px  1px  0px #FF0,
+							-1px -1px  0px #FF0;
+			}
+			#pog, .plus, .minus, .dead{
+				position: absolute;
+				top: 4; left: 4;
+				border: 1px solid #004;
+				color: #000;
+				transition: all 1s, top 0.3s, left 0.3s;
+				opacity: 0;
+			}
+			.plus{
+				width: 10px;
+				height: 10px;
+				background: #DEF;
+				background: linear-gradient(#DEF, SKYBLUE);
+				box-shadow:	 1px  1px  0px #DEF,
+							 1px -1px  0px #DEF,
+							-1px  1px  0px #DEF,
+							-1px -1px  0px #DEF;
+			}
+			.minus{
+				width: 15px;
+				height: 15px;
+				background: #BAB;
+				background: linear-gradient(#BAB, PINK);
+				box-shadow:	 1px  1px  0px #BAB,
+							 1px -1px  0px #BAB,
+							-1px  1px  0px #BAB,
+							-1px -1px  0px #BAB;
+			}
+			.dead{
+				width: 10px;
+				height: 10px;
+				opacity: 0;
+				background: white;
+			}
+			#debugman{
+				top: 0;
+				position: absolute;
+			}
+		</style>
+		<script type="text/javascript">
+			var qtde = 4;
+			var mais = 0;
+			var menos = 0;
+			var hideMais = 0;
+			var hideMenos = 0;
+			
+			function start()
+			{
+				calcRandomPos(pog);
+				addMais(1);
+				addMenos(1);
+				calcRandomPos(plus1);
+				calcRandomPos(minus1);
+				goDebugMan();
+			}
+			
+			function move(objeto, evento)
+			{
+				var keyCode = evento.keyCode || evento.which;
+				var top = pog.offsetTop;
+				var left = pog.offsetLeft;
+				
+				var limitHeight = pogman.offsetHeight - pog.offsetHeight - qtde - 2;
+				var limitWidth = pogman.offsetWidth - pog.offsetWidth - qtde - 2;
+				//calc = stage - pog - imaginary_border - solid_border
+				
+				//posição X
+				if (keyCode == 37) //esquerda
+				{
+					pog.style.textAlign = "left";
+					pog.innerHTML = "º__º";
+					left -= qtde;
+				}
+				if (keyCode == 39) //direita
+				{
+					pog.style.textAlign = "right";
+					pog.innerHTML = "º__º";
+					left += qtde;
+				}
+				
+				//posição Y
+				if (keyCode == 38) //cima
+				{
+					pog.style.textAlign = "center";
+					pog.innerHTML = "º__º";
+					top -= qtde;
+				}
+				if (keyCode == 40) //baixo
+				{
+					pog.style.textAlign = "center";
+					pog.innerHTML = "<br/>º__º";
+					top += qtde;
+				}
+				
+				if(left < qtde)
+				{
+					left = qtde;
+				}
+				if(left > limitWidth)
+				{
+					left = limitWidth;
+				}
+				if(top < qtde)
+				{
+					top = qtde;
+				}
+				if(top > limitHeight)
+				{
+					top = limitHeight;
+				}
+				
+				pog.style.left = left;
+				pog.style.top = top;
+				
+				var allMais = document.getElementsByClassName("plus");
+				var allMenos = document.getElementsByClassName("minus");
+				
+				for(var i = 0; i < allMais.length; i++)
+				{
+					touchPlus(allMais[i]);
+				}
+				for(var i = 0; i < allMenos.length; i++)
+				{
+					touchMinus(allMenos[i]);
+				}
+				
+				goDebugMan();
+			}
+			
+			function pogTouch(qtd)
+			{
+				pog.style.height = pog.offsetHeight + qtd - 2;
+				pog.style.width = pog.offsetWidth + qtd - 2;
+				pog.style.top = pog.offsetTop - (qtde/2);
+				pog.style.left = pog.offsetLeft - (qtde/2);
+			}
+			
+			function touchPlus(objeto)
+			{
+				var pogX = pog.offsetLeft;
+				var pogY = pog.offsetTop;
+				var pogXmax = pogX + pog.offsetWidth;
+				var pogYmax = pogY + pog.offsetHeight;
+				
+				var objX = objeto.offsetLeft;
+				var objY = objeto.offsetTop;
+				var objXmax = objX + objeto.offsetWidth;
+				var objYmax = objY + objeto.offsetHeight;
+				
+				var condicao = true;
+				condicao = condicao && (pogX < objXmax);
+				condicao = condicao && (pogY < objYmax);
+				condicao = condicao && (objX < pogXmax);
+				condicao = condicao && (objY < pogYmax);
+				
+				if(condicao)
+				{
+					pogTouch(3);
+					calcRandomPos(objeto);
+					addMais(2);
+					addMenos(3);
+				}
+			}
+			
+			function touchMinus(objeto)
+			{
+				var pogX = pog.offsetLeft;
+				var pogY = pog.offsetTop;
+				var pogXmax = pogX + pog.offsetWidth;
+				var pogYmax = pogY + pog.offsetHeight;
+				
+				var objX = objeto.offsetLeft;
+				var objY = objeto.offsetTop;
+				var objXmax = objX + objeto.offsetWidth;
+				var objYmax = objY + objeto.offsetHeight;
+				
+				var condicao = true;
+				condicao = condicao && (pogX < objXmax);
+				condicao = condicao && (pogY < objYmax);
+				condicao = condicao && (objX < pogXmax);
+				condicao = condicao && (objY < pogYmax);
+				
+				if(condicao)
+				{
+					pogTouch(-2);
+					calcRandomPos(objeto);
+					var nMenos = menos - hideMenos;
+					if(nMenos > 1)
+					{
+						var nMais = mais - hideMais;
+						if(nMenos < nMais)
+						{
+							addMais(-1);
+						}
+						addMenos(-1);
+					}
+				}
+			}
+			
+			function calcRandomPos(objeto)
+			{
+				objeto.style.opacity = 0;
+				
+				var randomX = pogman.offsetWidth - (qtde * 2) - objeto.offsetWidth;
+				var randomY = pogman.offsetHeight - (qtde * 2) - objeto.offsetHeight;
+				
+				randomX = Math.floor(Math.random() * randomX) + qtde;
+				randomY = Math.floor(Math.random() * randomY) + qtde;
+				
+				objeto.style.left = randomX;
+				objeto.style.top = randomY;
+				
+				objeto.style.opacity = 1;
+			}
+			
+			function addMais(qtde)
+			{
+				if(qtde > 0)
+				{
+					mais++;
+					pogman.innerHTML += "<div id='plus"+mais+"' class='plus'>+</div>";
+					calcRandomPos( document.getElementById("plus"+mais) );
+					addMais(qtde-1);
+				}
+				if(qtde < 0)
+				{
+					hideMais++;
+					hideMothaFucka( document.getElementById("plus"+hideMais) );
+					addMais(qtde+1);
+				}
+			}
+			
+			function addMenos(qtde)
+			{
+				if(qtde > 0)
+				{
+					menos++;
+					pogman.innerHTML += "<div id='minus"+menos+"' class='minus'>-</div>";
+					calcRandomPos( document.getElementById("minus"+menos) );
+					addMenos(qtde-1);
+				}
+				if(qtde < 0)
+				{
+					hideMenos++;
+					hideMothaFucka( document.getElementById("minus"+hideMenos) );
+					addMenos(qtde+1);
+				}
+			}
+			
+			function hideMothaFucka(objeto)
+			{
+				objeto.className = "dead";
+				objeto.style.opacity = 0;
+			}
+			
+			function goDebugMan()
+			{
+				var text;
+				text = " x:"+pog.offsetLeft;
+				text += " y:"+pog.offsetTop;
+				text += " mais:"+mais;
+				text += " menos:"+menos;
+				text += " tamanho:"+pog.offsetWidth;
+				debugman.innerHTML = text;
+			}
+		</script>
+	</head>
+	
+	<body onload="start()" onkeydown="move(this, event)" onkeyup="pog.style.textAlign='center'; pog.innerHTML = 'º__º';">
+		<div id="pogman">
+			<div id="pog">º__º</div>
+		</div>
+		<div id="debugman">
+			x: 0 y: 0 mais: 0 menos: 0
+		</div>
+	</body>
+</html>
