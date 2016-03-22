@@ -1,4 +1,3 @@
-<!--Escreva o HTML aqui-->
 <html>
 	<head>
 		<style type='text/css'>
@@ -173,8 +172,8 @@
 			{
 				pog.style.height = pog.offsetHeight + qtd - 2;
 				pog.style.width = pog.offsetWidth + qtd - 2;
-				pog.style.top = pog.offsetTop - (qtde/2);
-				pog.style.left = pog.offsetLeft - (qtde/2);
+				pog.style.top = pog.offsetTop - (qtd/2);
+				pog.style.left = pog.offsetLeft - (qtd/2);
 			}
 			
 			function touchPlus(objeto)
@@ -293,6 +292,7 @@
 			{
 				objeto.className = "dead";
 				objeto.style.opacity = 0;
+				objeto.remove();
 			}
 			
 			function goDebugMan()
